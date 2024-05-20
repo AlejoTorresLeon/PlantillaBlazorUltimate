@@ -1,8 +1,9 @@
 ﻿@page "/home"
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.Authorization;
+
 @rendermode InteractiveServer
-@* @attribute [Authorize]    *@
+@attribute [Authorize(Roles = "Administrador")] 
 <PageTitle>Home</PageTitle>
 
 
@@ -19,22 +20,25 @@
 <br />
 <MudText Typo="Typo.h5" GutterBottom="true">Interactivity in this Template</MudText>
 <br />
-<AuthorizeView>
-    <Authorized>
-        <br />
-        <MudText Typo="Typo.body1">
-            Bienvenido @context.User.Identity!.Name
-        </MudText>
-        <br />
-    </Authorized>
-    <NotAuthorized>
-        <br />
-        <MudText Typo="Typo.body1">
-            NO AUTORIZADO
-        </MudText>
-        <br />
-    </NotAuthorized>
-</AuthorizeView>
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
+            <br />
+            <MudText Typo="Typo.body1">
+                Bienvenido @context.User.Identity!.Name
+            </MudText>
+            <br />
+        </Authorized>
+        <NotAuthorized>
+            <br />
+            <MudText Typo="Typo.body1">
+                NO AUTORIZADO
+            </MudText>
+            <br />
+        </NotAuthorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>
+
 
 <MudText Typo="Typo.body2">
     When you opt for the "Global" Interactivity Location, <br />
