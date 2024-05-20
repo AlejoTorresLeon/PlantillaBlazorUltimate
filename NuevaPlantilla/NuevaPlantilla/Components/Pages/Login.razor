@@ -1,0 +1,43 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Components.Authorization
+@using NuevaPlantilla.Client.Shared.Login
+@using System.Security.Claims
+@using NuevaPlantilla.Extensions
+@using Blazored.SessionStorage
+@inject HttpClient httpClient
+@inject NavigationManager Navigation
+@inject ISessionService sessionService
+
+@rendermode InteractiveServer
+
+<MudPaper Width="400px" Class="mx-auto mt-16 pa-8">
+    <MudText Typo="Typo.h5">Login</MudText>
+    <MudTextField Label="Email" @bind-Value="login.Correo" Class="mt-4" />
+    <MudTextField Label="Password" @bind-Value="login.Clave" InputType="InputType.Password" Class="mt-4" />
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="IniciarSesion">Login</MudButton>
+</MudPaper>
+
+@code {
+    private LoginDTO login = new LoginDTO();
+   
+
+    private async Task IniciarSesion()
+    {        
+        var loginResponse = await httpClient.PostAsJsonAsync<LoginDTO>("http://localhost:3006/api/Usuario/Login", login);
+        if (loginResponse.IsSuccessStatusCode)
+        {
+            var sesionUsuario = await loginResponse.Content.ReadFromJsonAsync<SesionDTO>();
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, sesionUsuario.Nombre),
+                new Claim(ClaimTypes.Role, sesionUsuario.Rol)
+            };
+
+            await sessionService.SignInAsync(claims);
+
+            Navigation.NavigateTo("/home");
+        }
+    }
+
+}
+

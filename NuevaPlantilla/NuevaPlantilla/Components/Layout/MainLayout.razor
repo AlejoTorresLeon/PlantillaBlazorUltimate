@@ -1,0 +1,44 @@
+﻿@inherits LayoutComponentBase
+
+@* @using NuevaPlantilla.Client.Extensions *@
+@using Microsoft.AspNetCore.Components.Authorization
+@* @inject AuthenticationStateProvider autenticacionProvider *@
+@inject NavigationManager Navigation
+
+<MudThemingProvider />
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
+        <AuthorizeView>
+            <NotAuthorized>
+                <a href="/login">Login</a>
+            </NotAuthorized>
+            <Authorized>
+                <a href="/logout">Logout</a>
+            </Authorized>
+        </AuthorizeView>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent Class="mt-16 pa-4">
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+
+    private void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private async Task CerrarSession()
+    {
+        // var autenticacionExt = (AutenticacionExtension)autenticacionProvider;
+        // await autenticacionExt.ActualizarEstadoAutenticacion(null);
+        Navigation.NavigateTo("/login",true);
+    }
+
+}

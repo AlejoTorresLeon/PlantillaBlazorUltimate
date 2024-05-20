@@ -1,0 +1,41 @@
+﻿@* <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new[] { typeof(Client._Imports).Assembly }">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+</Router> *@
+@using Microsoft.AspNetCore.Components.Authorization
+@using NuevaPlantilla.Extensions
+@inject NavigationManager Navigation
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="new[] { typeof(Client._Imports).Assembly }">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" >
+
+                @* <NotAuthorized>
+                    @{
+                        if(context.User.Identity?.IsAuthenticated != true)
+                        {
+                            var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+                            if (!uri.AbsolutePath.Contains("/login", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                Navigation.NavigateTo("/login");
+                            }
+
+                            //Navigation.NavigateTo("/login");
+                        }
+                        else
+                        {
+                            <p class="alert alert-danger">No esta autorizado para ver esta pagina</p>
+                        }
+                    }
+
+                </NotAuthorized> *@
+            </AuthorizeRouteView>
+        </Found>
+    </Router>
+    @* <SessionInitializer /> *@
+</CascadingAuthenticationState>
+
+
